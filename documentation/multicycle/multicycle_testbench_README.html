@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>multicycle_testbench_README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="multicycle-risc-testbench-documentation">Multicycle RISC testbench Documentation</h1>
+<h2 id="block-diagrams">Block Diagrams</h2>
+<p>Important aspects of every stage.</p>
+<h3 id="fetch-stage-diagram"><strong>Fetch Stage Diagram:</strong></h3>
+<p>Fetch stage keeps the instruction memory inside and distribute it throughout the pipeline. It has a <em>pc_bias</em> port which makes it possible to load a program counter value, and it also counts with an <em>pc_en</em>, which allows the following instruction when rising clock edge comes.
+In the diagram it is detailed that <em>flow control</em> instructions, which are capable of taking control of the following instruction, are detected and resolved in Execute stage.
+<img src="Diagram_fetch_stage.png" alt="exec_stage"></p>
+<h3 id="decode-stage-diagram"><strong>Decode Stage Diagram:</strong></h3>
+<p><img src="Diagram_decode_stage.png" alt="exec_stage"></p>
+<h3 id="execute-stage-diagram"><strong>Execute Stage Diagram:</strong></h3>
+<p>Execute stage mostly computes operations whenever its needed. Usually its inputs are driven from decode stage, but in <em>movement</em> or <em>flow control</em> operations, <em>Imm</em>, <em>Imm</em> *, zeros, and forwarding inputs need to be included.
+<img src="Diagram_execute_stage.png" alt="exec_stage"></p>
+<h3 id="memory-stage-diagram"><strong>Memory Stage Diagram:</strong></h3>
+<p>Memory stage is simple. When data memory needs to be written its input can either come from C register (<em>store</em> instruction) or from the Imm* extension register (<em>storei</em> instruction). So, input MUX decides whether to choose regC which goes throughout the pipeline, Imm* which can be selected from the current instruction, or in the special case (forwarding) where the previous instruction intended to write C register, then it can come frome the WriteBack Stage. On the other hand, mem_address which is used for writing and reading instructions, and it always comes from alu output.
+<img src="Diagram_data_memory.png" alt="data_memory"></p>
+<h3 id="writeback-stage-diagram"><strong>WriteBack Stage Diagram:</strong></h3>
+<p>Write back output changes in the following way:</p>
+<ul>
+<li>wb_output = mem_output  in <em>load</em> instruction.</li>
+<li>wb_output = <em>Imm</em> * in <em>storei</em> instruction.</li>
+<li>wb_output = <em>pc+8'd1</em> in case of <em>jal</em> or <em>jral</em> instructions.</li>
+<li>wb_output = alu in all the other cases.</li>
+</ul>
+<p><img src="Diagram_wb_stage.png" alt="data_memory"></p>
+<h3 id="final-pipeline"><strong>Final Pipeline</strong></h3>
+<p><img src="Diagram_pipeline.png" alt="pipeline"></p>
+<hr>
+<h3 id="project-structure"><strong>Project Structure</strong></h3>
+<pre class="hljs"><code><div>└── 📁multicycle
+   └── top_multicycle.v
+      └── defines.v
+      └── alu_multicycle.v
+      └── memory.v
+         └── mem.hex
+      └── program_counter_multi.v
+         └── pc_mem_RANDOM.hex
+         └── pc_mem_TARGET.hex
+         └── pc_mem_target_multi.hex
+      └── register_file_multi.v
+         └── register_mem.hex
+         └── register_mem_aux.hex
+</div></code></pre>
+<p><strong>Top Module:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">module</span> top_multicycle #(
+    <span class="hljs-keyword">parameter</span> MEMORY_FILE   = <span class="hljs-string">"mem.hex"</span>,
+    <span class="hljs-keyword">parameter</span> PC_FILE       = <span class="hljs-string">"pc_mem_target_multi.hex"</span>,
+    <span class="hljs-keyword">parameter</span> REG_FILE      = <span class="hljs-string">"register_mem.hex"</span>
+   )
+   (
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                            clk,
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                            rst_n,
+
+    <span class="hljs-comment">//Debugging signals!</span>
+    <span class="hljs-comment">//.</span>
+    <span class="hljs-comment">//.</span>
+   );
+</div></code></pre>
+<p><strong>Alu Module:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">module</span> alu_multicycle
+    #(
+        <span class="hljs-keyword">parameter</span> NB_REGISTERS  = <span class="hljs-number">34</span>,
+        <span class="hljs-keyword">parameter</span> DATA_WIDTH    = <span class="hljs-number">32</span>
+   )
+   (
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [<span class="hljs-number">2</span>:<span class="hljs-number">0</span>]                   i_alu_ctrl, <span class="hljs-comment">//Controls the operation of alu</span>
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [NB_REGISTERS-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]      i_data_A,   <span class="hljs-comment">//ALU in A</span>
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [NB_REGISTERS-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]      i_data_B,   <span class="hljs-comment">//ALU in B</span>
+
+        <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span> [NB_REGISTERS-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]      o_data      <span class="hljs-comment">//ALU out</span>
+    );
+</div></code></pre>
+<p>the possible operations that ALU can do are:</p>
+<pre class="hljs"><code><div>   <span class="hljs-keyword">parameter</span> ADD       = <span class="hljs-number">3'd0</span>;
+   <span class="hljs-keyword">parameter</span> SUB       = <span class="hljs-number">3'd1</span>;
+   <span class="hljs-keyword">parameter</span> ADDC      = <span class="hljs-number">3'd2</span>;
+   <span class="hljs-keyword">parameter</span> SUBC      = <span class="hljs-number">3'd3</span>;
+   <span class="hljs-keyword">parameter</span> ALU_OR    = <span class="hljs-number">3'd4</span>;
+   <span class="hljs-keyword">parameter</span> ALU_AND   = <span class="hljs-number">3'd5</span>;
+   <span class="hljs-keyword">parameter</span> ALU_INV   = <span class="hljs-number">3'd6</span>;
+   <span class="hljs-keyword">parameter</span> EXCEPTION = <span class="hljs-number">3'd7</span>;
+</div></code></pre>
+<p><strong>Memory Module:</strong></p>
+<pre class="hljs"><code><div> <span class="hljs-keyword">module</span> memory 
+    #(
+        <span class="hljs-keyword">parameter</span> MEM_WIDTH  = <span class="hljs-number">8</span>,
+        <span class="hljs-keyword">parameter</span> DATA_WIDTH = <span class="hljs-number">32</span>,
+        <span class="hljs-keyword">parameter</span> ADDR_WIDTH = <span class="hljs-number">8</span>,
+        <span class="hljs-keyword">parameter</span> MEM_INIT_FILE = <span class="hljs-string">"mem.hex"</span>
+    )
+    (
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                            clk,
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                            rst_n,          <span class="hljs-comment">//disabled</span>
+    <span class="hljs-comment">//Input writing data</span>
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                            i_wenable,      <span class="hljs-comment">//write enable</span>
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>    [<span class="hljs-number">0</span>:ADDR_WIDTH-<span class="hljs-number">1</span>]        i_address,      <span class="hljs-comment">//write address</span>
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>    [<span class="hljs-number">0</span>:DATA_WIDTH-<span class="hljs-number">1</span>]        i_data,         <span class="hljs-comment">//write data</span>
+    <span class="hljs-comment">//Outputs</span>
+    <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span>    [<span class="hljs-number">0</span>:DATA_WIDTH-<span class="hljs-number">1</span>]        o_data          <span class="hljs-comment">//mem output</span>
+    );
+</div></code></pre>
+<p><strong>Register File Module:</strong></p>
+<pre class="hljs"><code><div> <span class="hljs-keyword">module</span> register_file_multi
+    #(
+        <span class="hljs-keyword">parameter</span> REG_WIDTH     = <span class="hljs-number">34</span>,
+        <span class="hljs-keyword">parameter</span> ADDR_WIDTH    = <span class="hljs-number">5</span>,
+        <span class="hljs-keyword">parameter</span> MEM_INIT_FILE = <span class="hljs-string">"register_mem.hex"</span>
+    )
+    (
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                        clk,
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                        rst_n,
+
+        <span class="hljs-comment">//Inputs:</span>
+        <span class="hljs-comment">//REGISTER A</span>
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [ADDR_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]        i_address_reg_a,     <span class="hljs-comment">//address A</span>
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                         i_wenable_reg_a,     <span class="hljs-comment">//write enable A</span>
+        <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [REG_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]         i_writedata_reg_a,   <span class="hljs-comment">//reg A write data</span>
+        <span class="hljs-comment">//REGISTER B AND C</span>
+      	<span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [ADDR_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]       i_address_reg_b,  <span class="hljs-comment">//address B</span>
+      	<span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [ADDR_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]       i_address_reg_c,  <span class="hljs-comment">//address C</span>
+
+        <span class="hljs-comment">//OUTPUTS</span>
+        <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span> [REG_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]         o_data_regb,   <span class="hljs-comment">//register B</span>
+        <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span> [REG_WIDTH-<span class="hljs-number">1</span>:<span class="hljs-number">0</span>]         o_data_regc    <span class="hljs-comment">//register C</span>
+    );
+</div></code></pre>
+<p><strong>Program Counter Module:</strong></p>
+<pre class="hljs"><code><div> <span class="hljs-keyword">module</span> program_counter_multi #(
+        <span class="hljs-keyword">parameter</span> MEM_INIT_FILE = <span class="hljs-string">"pc_mem_target_multi.hex"</span>
+    )
+    (
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                clk,
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                pc_en,                <span class="hljs-comment">//pc enable</span>
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span>                bias_en,              <span class="hljs-comment">//bias enable</span>
+    <span class="hljs-keyword">input</span>   <span class="hljs-keyword">wire</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]          bias,                 <span class="hljs-comment">//load pc</span>
+    <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span> [<span class="hljs-number">31</span>:<span class="hljs-number">0</span>]         instruction_output,   <span class="hljs-comment">//instruction</span>
+    <span class="hljs-keyword">output</span>  <span class="hljs-keyword">wire</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]          program_counter       <span class="hljs-comment">//pc</span>
+);
+</div></code></pre>
+<hr>
+<h1 id="alu-operations-by-instruction">ALU operations by instruction</h1>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>ALU operation</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MOVEMENT</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>load</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm*</td>
+<td>Mem_addr</td>
+</tr>
+<tr>
+<td><strong>store</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm</td>
+<td>Mem_addr</td>
+</tr>
+<tr>
+<td><strong>loadi</strong></td>
+<td>0(+)</td>
+<td>Imm*</td>
+<td></td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>storei</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td></td>
+<td>Mem_addr</td>
+</tr>
+<tr>
+<td><strong>mov</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td></td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>LOGIC</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>4(or)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>inv</strong></td>
+<td>6(~)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>and</strong></td>
+<td>5(&amp;)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>ARITHMETIC</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>add</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>sub</strong></td>
+<td>1(-)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>addC</strong></td>
+<td>2(+c)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>subC</strong></td>
+<td>3(-c)</td>
+<td>Rb</td>
+<td>Rc</td>
+<td>WB_output</td>
+</tr>
+<tr>
+<td><strong>FLOW CONTROL</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>jump</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bz</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bnz</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bc</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bv</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>jal</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm*</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>jral</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>Imm*</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>ret</strong></td>
+<td>0(+)</td>
+<td>Rb</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="target-testbench">Target Testbench</h1>
+<p>The following documentation corresponds to the work done in the target testbench.</p>
+<h3 id="instructions-executed">Instructions executed</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>inv</strong></td>
+<td>31</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>and</strong></td>
+<td>31</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>add</strong></td>
+<td>31</td>
+<td>31</td>
+<td>30</td>
+</tr>
+<tr>
+<td><strong>sub</strong></td>
+<td>31</td>
+<td>28</td>
+<td>29</td>
+</tr>
+<tr>
+<td><strong>addc</strong></td>
+<td>31</td>
+<td>27</td>
+<td>26</td>
+</tr>
+<tr>
+<td><strong>subc</strong></td>
+<td>31</td>
+<td>25</td>
+<td>24</td>
+</tr>
+<tr>
+<td><strong>load</strong></td>
+<td>31</td>
+<td>23</td>
+<td>22</td>
+</tr>
+<tr>
+<td><strong>store</strong></td>
+<td>21</td>
+<td>20</td>
+<td>19</td>
+</tr>
+<tr>
+<td><strong>loadi</strong></td>
+<td>31</td>
+<td>63</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>storei</strong></td>
+<td>31</td>
+<td>127</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>mov</strong></td>
+<td>31</td>
+<td>15</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>load</strong></td>
+<td>31</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>add</strong></td>
+<td>31</td>
+<td>31</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>loadi</strong></td>
+<td>30</td>
+<td>30</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>jump</strong></td>
+<td>2</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>bz</strong></td>
+<td>1</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>bnz</strong></td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>bc</strong></td>
+<td>1</td>
+<td>30</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>bv</strong></td>
+<td>1</td>
+<td>30</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>jal</strong></td>
+<td>31</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>jral</strong></td>
+<td>31</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>31</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>ret</strong></td>
+<td>18</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><u> Observe the following: </u></p>
+<ul>
+<li>In <em>ADD</em> operation (PCF=5 in Fetch Stage, PCE=3 in Execute Stage) a Forwarding Hazard should arise, since register 31 is inteded to use, which has been prevously written.</li>
+<li>In <em>LOADI</em> operation (PCE=9) a Forwarding Hazard should arise, since Imm*=63 which makes Rc field be 5'b11111. This goofs Hazard unit into thinking that Rc field is 31st register and 2 operations before, in <em>LOAD</em> operation, 31st register was intended to be written (detected in writeback stage). This wont make any change, since ALU control will handle it, ignoring hazard.</li>
+<li>In <em>STOREI</em> operation (PCE=10) a Forwarding Hazard should arise, since its intended to use Rb=31 register to access memory, but previous operation <em>LOADI</em> tries to write register 31. A 63 should be passed.</li>
+<li>Second call to <em>LOAD</em> operation (PCE=12) was introduced to force a Stall Hazard. <em>LOAD</em> intends to write 31st register from memory but in Decode Stage is detected that next operation will need that 31st register to do an ALU computation. This will force the pipeline to stop for a while until memory is addressed, and in next clock a Forwarding is made from WriteBack Stage up to Execute Stage.</li>
+<li>Last <em>RET</em> instruction goes back to <em>BV</em> instruction, thus RISC enters a loop from 19th instruction and on.</li>
+</ul>
+<h3 id="hazards">Hazards</h3>
+<p><u> How hazards are detected? </u></p>
+<ol>
+<li><strong>FORWARDING:</strong> forwarding is asserted high whenever the Rb or Rc field of instruction in Execute Stage is the same as the Ra field in Memory or WriteBack Stage. This means that whenever Imm* use is intended, encompassing Rc field, a hazard may arise. These special cases are addressed in control unit.</li>
+<li><strong>STALL:</strong> stall hazard is arised when in Memory Stage, a <em>LOAD</em> instruction is detected and the destination address is the same as an Rb or Rc address in Execute Stage. This will flush Decode Stage Register.</li>
+<li><strong>BRANCH:</strong> branch control hazard is arised whenever a FLOW CONTROL instruction is detected in the Execute Stage. This will flush Decode and Execute registers, and stall Decode Register.</li>
+</ol>
+<p><img src="Diagram_control_branch.png" alt="control"></p>
+<h3 id="target-testbench-executed">Target testbench executed</h3>
+<p>These are the instructions tested in target_testbench. The whole system, signals and waveforms, instructions, and operations, were followed and checked. The following diagram may help as a road map:</p>
+<ul>
+<li>In green, instructions that shall be executed.</li>
+<li>In yellow, instructions that arise hazards. When a hazard occur, the stages involved are highlighted, indicating for example the origin and destination of a forwarding hazard.</li>
+<li>In blue, instructions, flushes, or actions executed in order to solve hazards.</li>
+<li>In red, garbage instructions which shouldnt be executed
+<img src="target_instructions.png" alt="instructions"></li>
+</ul>
+<p>Explanation of some key points about the comparisons executed:</p>
+<ol>
+<li><strong>TEST N0 - 4th clock</strong>:
+<ul>
+<li>Memory: input should be 32'hffffffff since it comes from regC, <em>addc</em> is in decode stage addressing regC -&gt; reg[30] = 32'hfffffff</li>
+<li>Decode: <em>regA</em> input data is 1 as <em>or</em> operation is on WriteBack stage.</li>
+</ul>
+</li>
+<li><strong>TEST N1 - 8th clock</strong>:
+<ul>
+<li>Memory: input should be 32'h16 since it comes from decode stage <em>regC</em>. <em>load 31,23,22</em> is in decode stage addressing regC -&gt; reg[22] = 32'd22 = 32h16</li>
+<li>Decode: <em>regA</em> input data is 34'h30000001c as <em>subc</em> operation is on WriteBack stage. <em>subc</em> operation makes 32'h0000001c - 32'hffffffff - 32'd1, so the result is a <em>1c</em> with underflow, in the MSB.</li>
+</ul>
+</li>
+<li><strong>TEST N2 - 13th clock</strong>:
+<ul>
+<li>Memory: memory addr is 42 since two clocks before <em>load</em> instruction loaded 31st register from memory, acquiring 32'h3d155142 value. Then, since memory addr uses the 8 LSbits, its value is 42.</li>
+</ul>
+</li>
+</ol>
+
+</body>
+</html>
